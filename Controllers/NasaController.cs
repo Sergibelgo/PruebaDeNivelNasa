@@ -10,10 +10,14 @@ namespace PruebaDeNivelNasa.Controllers
     {
         private readonly string _url= "https://api.nasa.gov/neo/rest/v1/feed";
         private readonly INasaService _nasaService;
+        private readonly IJSONService _JSONService;
+        private readonly IDateService _dateService;
 
-        public NasaController( INasaService nasaService)
+        public NasaController( INasaService nasaService,IJSONService jSONService,IDateService dateService)
         {
             _nasaService = nasaService;
+            _JSONService = jSONService;
+            _dateService = dateService;
         }
     }
 }
