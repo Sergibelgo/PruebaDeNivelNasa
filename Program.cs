@@ -1,4 +1,6 @@
 
+using PruebaDeNivelNasa.Services;
+
 namespace PruebaDeNivelNasa
 {
     public class Program
@@ -13,7 +15,8 @@ namespace PruebaDeNivelNasa
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddTransient<INasaService, NasaService>();
+            builder.Services.AddTransient<IJSONService, JSONService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
