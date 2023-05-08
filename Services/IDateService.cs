@@ -2,6 +2,6 @@
 {
     public interface IDateService
     {
-        Task<DateTime> GetDate(DateTime startDate, int days);
+        DateTime GetDate(DateTime startDate, int days);
     }
 }
