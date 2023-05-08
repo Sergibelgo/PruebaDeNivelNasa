@@ -18,6 +18,7 @@ namespace PruebaDeNivelNasa
             builder.Services.AddTransient<INasaService, NasaService>();
             builder.Services.AddTransient<IJSONService, JSONService>();
             builder.Services.AddTransient<IDateService, DateService>();
+            builder.Services.AddHttpClient();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
