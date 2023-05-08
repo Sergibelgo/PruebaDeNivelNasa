@@ -1,7 +1,10 @@
-﻿namespace PruebaDeNivelNasa.Services
+﻿using PruebaDeNivelNasa.Models;
+
+namespace PruebaDeNivelNasa.Services
 {
     public interface INasaService
     {
-        Task GetInfo<ResultadoPeticionApi>(DateOnly startDate, DateOnly endDate);
+        ResponseDTO GetData(ResultadoPeticionApi dataAPI);
+        Task<string> GetInfo(string url);
     }
 }

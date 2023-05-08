@@ -2,9 +2,9 @@
 {
     public class DateService : IDateService
     {
-        public Task<DateTime> GetDate(DateTime startDate, int days)
+        public DateTime GetDate(DateTime startDate, int days)
         {
-            throw new NotImplementedException();
+            return startDate.AddDays(days);
         }
     }
 }
