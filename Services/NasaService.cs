@@ -8,5 +8,10 @@
         {
             _httpClient = httpClient;
         }
+
+        public Task GetInfo<ResultadoPeticionApi>(DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

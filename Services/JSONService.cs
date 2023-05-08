@@ -7,5 +7,10 @@ namespace PruebaDeNivelNasa.Services
         {
             
         }
+
+        public string ConvertData(object data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

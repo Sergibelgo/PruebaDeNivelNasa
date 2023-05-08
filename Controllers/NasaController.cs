@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using PruebaDeNivelNasa.Models;
 using PruebaDeNivelNasa.Services;
 
 namespace PruebaDeNivelNasa.Controllers
@@ -11,23 +14,29 @@ namespace PruebaDeNivelNasa.Controllers
         private readonly INasaService _nasaService;
         private readonly IJSONService _JSONService;
         private readonly IDateService _dateService;
+        private readonly IMapper _mapper;
 
-        public NasaController( INasaService nasaService,IJSONService jSONService,IDateService dateService)
+        public NasaController( INasaService nasaService,IJSONService jSONService,IDateService dateService,IMapper mapper)
         {
             _nasaService = nasaService;
             _JSONService = jSONService;
             _dateService = dateService;
+            _mapper = mapper;
         }
         [HttpGet("days:int")]
         public async Task<IActionResult> GetInfo(int days)
         {
-            var startDate = DateTime.Now;
-            var endDate = await _dateService.GetDate(startDate,days);
-            if (endDate is null)
+            DateTime startDate = DateTime.Now;
+            DateTime endDate;
+            try
+            {
+                endDate = await _dateService.GetDate(startDate, days);
+            }
+            catch
             {
                 return BadRequest("Invalid number of days, it must be between 1 and 7");
             }
-            var data=await _nasaService.GetInfo(startDate,endDate);
+            ResultadoPeticionApi data = await _nasaService.GetInfo(startDate, endDate);
             if (data is null)
             {
                 return BadRequest("The data could not be fetched from the API");
@@ -40,7 +49,7 @@ namespace PruebaDeNivelNasa.Controllers
         {
             string data;
             try {
-                using StreamReader reader = new StreamReader("~/Resources/testJson.json");
+                using StreamReader reader = new StreamReader("./Resources/testJson.json");
                 data = reader.ReadToEnd();
             }
             catch(FileNotFoundException)
