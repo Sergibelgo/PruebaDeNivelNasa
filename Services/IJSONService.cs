@@ -2,5 +2,6 @@
 {
     public interface IJSONService
     {
+        string ConvertData(object data);
     }
 }
