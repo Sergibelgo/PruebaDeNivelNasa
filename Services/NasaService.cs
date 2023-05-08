@@ -14,10 +14,12 @@ namespace PruebaDeNivelNasa.Services
             _mapper = mapper;
         }
 
-        public ResponseDTO GetData(ResultadoPeticionApi dataAPI)
+        public ResponseDTO GetData(ResultadoPeticionApi dataAPI,int limit)
         {
-            ResponseDTO responseDTO = new ();
-            responseDTO.List = new();
+            ResponseDTO responseDTO = new()
+            {
+                List = new()
+            };
             foreach (List<Asteroid> asteroids in dataAPI.near_earth_objects.Values)
             {
                 foreach (Asteroid asteroid in asteroids)
@@ -25,7 +27,7 @@ namespace PruebaDeNivelNasa.Services
                     responseDTO.List.Add(_mapper.Map<AsteroidDTO>(asteroid));
                 }
             }
-            responseDTO.List=responseDTO.List.OrderBy(a=>a.Diametro).Take(3).ToList();
+            LimitList(limit, responseDTO);
             return responseDTO;
         }
 
@@ -40,6 +42,10 @@ namespace PruebaDeNivelNasa.Services
             {
                 return null;
             }
+        }
+        private void LimitList(int limit,ResponseDTO response)
+        {
+            response.List = response.List.OrderBy(a => a.Diametro).Take(3).ToList();
         }
     }
 }
