@@ -21,12 +21,13 @@ namespace PruebaDeNivelNasa.Controllers
         [HttpGet("days:int")]
         public async Task<IActionResult> GetInfo(int days)
         {
-            var endDate = await _dateService.GetDate(days);
+            var startDate = DateTime.Now;
+            var endDate = await _dateService.GetDate(startDate,days);
             if (endDate is null)
             {
                 return BadRequest("Invalid number of days, it must be between 1 and 7");
             }
-            var data=await _nasaService.GetInfo(DateTime.Now,endDate);
+            var data=await _nasaService.GetInfo(startDate,endDate);
             if (data is null)
             {
                 return BadRequest("The data could not be fetched from the API");
