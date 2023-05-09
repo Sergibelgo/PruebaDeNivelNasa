@@ -6,7 +6,7 @@ namespace PruebaDeNivelNasa.Services
 {
     public class JSONService : IJSONService
     {
-        public JSONService(IMapper mapper)
+        public JSONService()
         {
         }
 
