@@ -40,7 +40,11 @@ namespace PruebaDeNivelNasa.Services
 
         public async Task<string> GetInfo(string url)
         {
-           var json = await _httpClient.GetAsync(url);
+            if (url is null || url == string.Empty)
+            {
+                return null;
+            }
+            var json = await _httpClient.GetAsync(url);
             if (json.IsSuccessStatusCode)
             {
                 return await json.Content.ReadAsStringAsync();

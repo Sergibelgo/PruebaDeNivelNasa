@@ -367,3 +367,6 @@ FodyWeavers.xsd
 /Test/obj/Debug/net7.0/Test.pdb
 /Test/bin/Debug/net7.0/Test.dll
 /Test/bin/Debug/net7.0/Test.pdb
+/Test/bin/Debug/net7.0/PruebaDeNivelNasa.dll
+/Test/obj/Debug/net7.0/Test.csproj.CoreCompileInputs.cache
+/Test/bin/Debug/net7.0/PruebaDeNivelNasa.pdb
