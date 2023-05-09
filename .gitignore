@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Test/obj/Debug/net7.0/refint/Test.dll
+/Test/obj/Debug/net7.0/Test.dll
+/Test/obj/Debug/net7.0/ref/Test.dll
+/Test/obj/Debug/net7.0/Test.pdb
+/Test/bin/Debug/net7.0/Test.dll
+/Test/bin/Debug/net7.0/Test.pdb

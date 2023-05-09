@@ -7,17 +7,26 @@ namespace Test
     [TestClass]
     public class TestMoq
     {
+        private readonly NasaService _nasaService;
+        public TestMoq()
+        {
+            Mock<IMapper> mapperRepo = new Mock<IMapper>();
+            HttpClient httpClient = new HttpClient();
+            _nasaService = new(httpClient, mapperRepo.Object);
+        }
         [TestMethod]
         public void TestConnection()
         {
-            Mock<IMapper> mapperRepo = new Mock<IMapper>();
-            Mock<HttpClient> httpClient = new Mock<HttpClient>();
-            NasaService nasaService = new(httpClient.Object,mapperRepo.Object);
-            //
-            var json = nasaService.GetInfo("https://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&api_key=DEMO_KEY");
-            //Comprobamos que haya recojido bien la información
-            //Si la api esta caida no se puede testear
+            var json = _nasaService.GetInfo("https://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&api_key=DEMO_KEY");
             Assert.IsNotNull(json);
+        }
+        [TestMethod]
+        public void TestResponse()
+        {
+            Mock<IMapper> mapperRepo = new Mock<IMapper>();
+            HttpClient httpClient = new HttpClient();
+            NasaService nasaService = new(httpClient, mapperRepo.Object);
+            
         }
     }
 }
