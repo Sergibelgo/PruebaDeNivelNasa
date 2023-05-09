@@ -15,6 +15,7 @@ namespace Test
             _nasaService = new(httpClient, mapperRepo.Object);
         }
         [TestMethod]
+         //Test conexion a la api de la nasa
         public void TestConnection()
         {
             var json = _nasaService.GetInfo("https://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&api_key=DEMO_KEY");
