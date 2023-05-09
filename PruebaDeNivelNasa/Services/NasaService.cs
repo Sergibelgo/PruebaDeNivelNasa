@@ -52,7 +52,7 @@ namespace PruebaDeNivelNasa.Services
         }
         private void LimitList(int limit,ResponseDTO response)
         {
-            response.List = response.List.OrderBy(a => a.Diametro).Take(limit).ToList();
+            response.List = response.List.OrderByDescending(a => a.Diametro).Take(limit).ToList();
         }
     }
 }
