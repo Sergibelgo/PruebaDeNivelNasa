@@ -1,0 +1,187 @@
+﻿{
+    "links": {
+        "next": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-12&end_date=2021-12-15&detailed=false&api_key=DEMO_KEY",
+        "previous": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-06&end_date=2021-12-09&detailed=false&api_key=DEMO_KEY",
+        "self": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&detailed=false&api_key=DEMO_KEY"
+    },
+    "element_count": 82,
+    "near_earth_objects": {
+        "2021-12-12": [
+            {
+                "links": {
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2004341?api_key=DEMO_KEY"
+                },
+                "id": "2004341",
+                "neo_reference_id": "2004341",
+                "name": "4341 Poseidon (1987 KF)",
+                "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=2004341",
+                "absolute_magnitude_h": 16.08,
+                "estimated_diameter": {
+                    "kilometers": {
+                        "estimated_diameter_min": 1.6164228334,
+                        "estimated_diameter_max": 3.6144313359
+                    },
+                    "meters": {
+                        "estimated_diameter_min": 1616.4228333988,
+                        "estimated_diameter_max": 3614.4313358626
+                    },
+                    "miles": {
+                        "estimated_diameter_min": 1.0043982724,
+                        "estimated_diameter_max": 2.2459028136
+                    },
+                    "feet": {
+                        "estimated_diameter_min": 5303.2246887282,
+                        "estimated_diameter_max": 11858.3709039515
+                    }
+                },
+                "is_potentially_hazardous_asteroid": true,
+                "close_approach_data": [
+                    {
+                        "close_approach_date": "2021-12-12",
+                        "close_approach_date_full": "2021-Dec-12 13:35",
+                        "epoch_date_close_approach": 1639316100000,
+                        "relative_velocity": {
+                            "kilometers_per_second": "17.8282205694",
+                            "kilometers_per_hour": "64181.5940497522",
+                            "miles_per_hour": "39879.9465916363"
+                        },
+                        "miss_distance": {
+                            "astronomical": "0.3316696571",
+                            "lunar": "129.0194966119",
+                            "kilometers": "49617074.245790377",
+                            "miles": "30830620.3014741226"
+                        },
+                        "orbiting_body": "Earth"
+                    }
+                ],
+                "is_sentry_object": false
+            },
+            {
+                "links": {
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3144531?api_key=DEMO_KEY"
+                },
+                "id": "3144531",
+                "neo_reference_id": "3144531",
+                "name": "(2002 XS90)",
+                "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3144531",
+                "absolute_magnitude_h": 22.8,
+                "estimated_diameter": {
+                    "kilometers": {
+                        "estimated_diameter_min": 0.0732073989,
+                        "estimated_diameter_max": 0.1636967205
+                    },
+                    "meters": {
+                        "estimated_diameter_min": 73.2073989347,
+                        "estimated_diameter_max": 163.696720474
+                    },
+                    "miles": {
+                        "estimated_diameter_min": 0.0454889547,
+                        "estimated_diameter_max": 0.1017163949
+                    },
+                    "feet": {
+                        "estimated_diameter_min": 240.181762721,
+                        "estimated_diameter_max": 537.0627483999
+                    }
+                },
+                "is_potentially_hazardous_asteroid": false,
+                "close_approach_data": [
+                    {
+                        "close_approach_date": "2021-12-12",
+                        "close_approach_date_full": "2021-Dec-12 13:37",
+                        "epoch_date_close_approach": 1639316220000,
+                        "relative_velocity": {
+                            "kilometers_per_second": "19.9654451851",
+                            "kilometers_per_hour": "71875.6026664327",
+                            "miles_per_hour": "44660.7043345954"
+                        },
+                        "miss_distance": {
+                            "astronomical": "0.3052659075",
+                            "lunar": "118.7484380175",
+                            "kilometers": "45667129.545617025",
+                            "miles": "28376238.475983945"
+                        },
+                        "orbiting_body": "Earth"
+                    }
+                ],
+                "is_sentry_object": false
+            },
+            {
+                "links": {
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3304566?api_key=DEMO_KEY"
+                },
+                "id": "3304566",
+                "neo_reference_id": "3304566",
+                "name": "(2005 WS3)",
+                "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3304566",
+                "absolute_magnitude_h": 21.23,
+                "estimated_diameter": {
+                    "kilometers": {
+                        "estimated_diameter_min": 0.1508533561,
+                        "estimated_diameter_max": 0.3373183589
+                    },
+                    "meters": {
+                        "estimated_diameter_min": 150.8533561176,
+                        "estimated_diameter_max": 337.3183589129
+                    },
+                    "miles": {
+                        "estimated_diameter_min": 0.0937359007,
+                        "estimated_diameter_max": 0.209599846
+                    },
+                    "feet": {
+                        "estimated_diameter_min": 494.9257248848,
+                        "estimated_diameter_max": 1106.6875646559
+                    }
+                },
+                "is_potentially_hazardous_asteroid": false,
+                "close_approach_data": [
+                    {
+                        "close_approach_date": "2021-12-12",
+                        "close_approach_date_full": "2021-Dec-12 10:15",
+                        "epoch_date_close_approach": 1639304100000,
+                        "relative_velocity": {
+                            "kilometers_per_second": "19.3534563343",
+                            "kilometers_per_hour": "69672.4428034062",
+                            "miles_per_hour": "43291.7464741498"
+                        },
+                        "miss_distance": {
+                            "astronomical": "0.1827198874",
+                            "lunar": "71.0780361986",
+                            "kilometers": "27334505.961679838",
+                            "miles": "16984874.4054962444"
+                        },
+                        "orbiting_body": "Earth"
+                    }
+                ],
+                "is_sentry_object": false
+            },
+            {
+                "links": {
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3529587?api_key=DEMO_KEY"
+                },
+                "id": "3529587",
+                "neo_reference_id": "3529587",
+                "name": "(2010 LJ61)",
+                "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3529587",
+                "absolute_magnitude_h": 20.95,
+                "estimated_diameter": {
+                    "kilometers": {
+                        "estimated_diameter_min": 0.1716148941,
+                        "estimated_diameter_max": 0.3837425691
+                    },
+                    "meters": {
+                        "estimated_diameter_min": 171.6148940774,
+                        "estimated_diameter_max": 383.7425691085
+                    },
+                    "miles": {
+                        "estimated_diameter_min": 0.1066365183,
+                        "estimated_diameter_max": 0.2384465039
+                    },
+                    "feet": {
+                        "estimated_diameter_min": 563.0410090849,
+                        "estimated_diameter_max": 1258.997970434
+                    }
+                }
+            }
+        ]
+    }
+}

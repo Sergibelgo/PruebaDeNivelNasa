@@ -6,11 +6,11 @@ namespace PruebaDeNivelNasa.Services
 {
     public class AutoMapperProfiles:Profile
     {
+        /// <summary>
+        /// Profiles for the automapper
+        /// </summary>
         public AutoMapperProfiles()
         {
-            //CreateMap<Tarea, TareaDTO>()
-            //    .ForMember(dto => dto.PasosTotales, ent => ent.MapFrom(x => x.Pasos.Count()))
-            //    .ForMember(dto => dto.PasosRealizados, ent => ent.MapFrom(x => x.Pasos.Where(p => p.Realizado).Count()));
             CreateMap<Asteroid, AsteroidDTO>()
                 .ForMember(dto=>dto.Nombre,ent=>ent.MapFrom(x=>x.name))
                 .ForMember(dto => dto.Fecha, ent => ent.MapFrom(x => x.close_approach_data[0].close_approach_date))

@@ -4,8 +4,8 @@ namespace PruebaDeNivelNasa.Services
 {
     public interface IJSONService
     {
-        ResultadoPeticionApi ConvertData(string data);
-        string GetResult(ResponseDTO responseDTO);
+        T ConvertData<T>(string data);
+        string GetResult<T>(T model);
         string GetUrl(string url,DateTime startDate,DateTime endDate,string key);
     }
 }
