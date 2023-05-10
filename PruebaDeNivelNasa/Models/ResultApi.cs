@@ -1,6 +1,6 @@
 ﻿namespace PruebaDeNivelNasa.Models
 {
-    public class ResultadoPeticionApi
+    public class ResultApi
     {
         public int element_count { get; set; }
         public Dictionary<DateOnly, List<Asteroid>> near_earth_objects { get; set; }
