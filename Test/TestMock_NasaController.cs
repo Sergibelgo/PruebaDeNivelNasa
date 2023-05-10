@@ -10,7 +10,7 @@ using PruebaDeNivelNasa.Services;
 namespace Test
 {
     [TestClass]
-    public class TestNasaController
+    public class TestMock_NasaController
     {
         [TestMethod]
         public async Task TestResponse()
