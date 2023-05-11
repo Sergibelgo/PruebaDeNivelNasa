@@ -23,15 +23,17 @@ namespace PruebaDeNivelNasa.Services
         /// <param name="limit">The limit of asteroids to take</param>
         /// <returns>An object of type ResponseDTO</returns>
 
-        public ResponseDTO GetData(ResultApi dataAPI,int limit)
+        public ResponseDTO GetData(ResultApi dataAPI,int limit=3)
         {
+            int validLimit = limit < 1 ? 3 : limit;
+            limit = validLimit;
             ResponseDTO responseDTO = new()
             {
                 List = new()
             };
             foreach (List<Asteroid> asteroids in dataAPI.near_earth_objects.Values)
             {
-                var hazarOnes = GetHazarOnes(asteroids);
+                var hazarOnes = GetHazardOnes(asteroids);
                 foreach (Asteroid asteroid in hazarOnes)
                 {
                     responseDTO.List.Add(_mapper.Map<AsteroidDTO>(asteroid));
@@ -45,7 +47,7 @@ namespace PruebaDeNivelNasa.Services
         /// </summary>
         /// <param name="asteroids">The list of object of type "Asteroid"</param>
         /// <returns>An IEnumerable of objects type "Asteroid"</returns>
-        private IEnumerable<Asteroid> GetHazarOnes(List<Asteroid> asteroids)
+        private IEnumerable<Asteroid> GetHazardOnes(List<Asteroid> asteroids)
         {
             var list = asteroids.Where(a => a.is_potentially_hazardous_asteroid == true);
             return list;
@@ -54,12 +56,13 @@ namespace PruebaDeNivelNasa.Services
         /// Method to fetch the data from the url given
         /// </summary>
         /// <param name="url">Url where the data will be fetch</param>
-        /// <returns>String content of the url or null if the status code was not succes</returns>
+        /// <returns>String content of the url if the status code is success or null if the url was not valid</returns>
+        /// <exception cref="Exception">Throw if the api returns a non success status code</exception>
         public async Task<string> FetchData(string url)
         {
             if (url is null || url == string.Empty)
             {
-                return null;
+                throw new Exception("400__{error:'The URL could not be resolved'}");
             }
             HttpResponseMessage response;
             try { 
@@ -67,7 +70,7 @@ namespace PruebaDeNivelNasa.Services
             }
             catch
             {
-                return null;
+                throw new Exception("400__{error:'The URL could not be resolved'}");
             }
             if (response.IsSuccessStatusCode)
             {
@@ -75,7 +78,9 @@ namespace PruebaDeNivelNasa.Services
             }
             else
             {
-                return null;
+                int errorCode = (int)response.StatusCode;
+                string message=await response.Content.ReadAsStringAsync();
+                throw new Exception($"{errorCode}__{message}");
             }
         }
         /// <summary>

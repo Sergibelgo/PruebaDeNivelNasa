@@ -35,31 +35,65 @@ namespace PruebaDeNivelNasa.Controllers
         {
             if (days is null)
             {
-                return BadRequest("The query parameter 'days' is necesary, please add it to use the API");
+                var error = "The query parameter 'days' is necesary, please add it to use the API";
+                var responseError = _JSONService.GetResult(error);
+                return BadRequest(responseError);
             }
             if (days < 1 || days > 7)
             {
-                return BadRequest("Invalid number of days, it must be between 1 and 7");
+                var error = "Invalid number of days, it must be between 1 and 7";
+                var responseError = _JSONService.GetResult(error);
+                return UnprocessableEntity(responseError);
             }
             if (limit < 1)
             {
-                return BadRequest("The limit must be positive and bigger than 0");
+                var error = "The limit must be positive and bigger than 0";
+                var responseError = _JSONService.GetResult(error);
+                return UnprocessableEntity(responseError);
             }
             DateTime startDate = DateTime.Now;
             DateTime endDate = _dateService.GetDate(startDate, (int)days);
-            string url = _JSONService.GetUrl(_url, startDate, endDate, key);
-            string data = await _nasaService.FetchData(url);
-            if (data is null)
+            string url;
+            try
             {
-                return BadRequest("The data could not be fetched from the API");
+                url = _JSONService.GetUrl(_url, startDate, endDate, key);
+            }
+            catch (Exception ex)
+            {
+                var messageError = $"Tried to generate a url with the given data but was not valid: {ex.Message}";
+                var responseError = _JSONService.GetResult(messageError);
+                return StatusCode(500, responseError);
+            }
+
+            string data;
+            try
+            {
+                data = await _nasaService.FetchData(url);
+            }
+            catch (Exception ex)
+            {
+                var error = ex.Message.Split("__");
+                int code = int.Parse(error[0]);
+                var message = error[1];
+                return StatusCode(code, message);
+            }
+            if (String.IsNullOrEmpty(data))
+            {
+                var error = "The URL to fetch was empty";
+                var responseError = _JSONService.GetResult(error);
+                return BadRequest(responseError);
             }
             ResultApi dataAPI = _JSONService.ConvertData<ResultApi>(data);
             ResponseDTO responseDTO = _nasaService.GetData(dataAPI, limit);
+            string response;
             if (responseDTO is null || responseDTO.List.Count == 0)
             {
-                return Ok($"There are no hazard asterois between {startDate:yyyy-MM-dd} and {endDate:yyyy-MM-dd}");
+                response = _JSONService.GetResult($"There are no hazard asterois between {startDate:yyyy-MM-dd} and {endDate:yyyy-MM-dd}");
             }
-            string response = _JSONService.GetResult(responseDTO);
+            else
+            {
+                response = _JSONService.GetResult(responseDTO);
+            }
             return Ok(response);
         }
         /// <summary>

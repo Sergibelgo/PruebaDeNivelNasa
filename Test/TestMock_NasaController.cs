@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -10,10 +11,22 @@ using PruebaDeNivelNasa.Services;
 namespace Test
 {
     [TestClass]
-    public class TestNasaController
+    public class TestMock_NasaController
     {
+        private readonly IConfiguration _configuration;
+        public TestMock_NasaController()
+        {
+            var myConfiguration = new Dictionary<string, string>
+            {
+                {"APIURL", "https://api.nasa.gov/neo/rest/v1/feed"},
+            };
+
+            _configuration = new ConfigurationBuilder()
+               .AddInMemoryCollection(myConfiguration)
+               .Build();
+        }
         [TestMethod]
-        public async Task TestResponse()
+        public async Task TestResponseNormal()
         {
             //Arrange
             Dictionary<string, string> DataForResponse = GetDataForResponseTest();
@@ -22,7 +35,6 @@ namespace Test
             Mock<INasaService> mockNasa = new();
             Mock<IJSONService> mockJson = new();
             Mock<IDateService> mockIDate = new();
-            Mock<IConfiguration> mockConfig = new();
 
             mockNasa.Setup(a => a.FetchData(It.IsAny<string>())).ReturnsAsync(DataForResponse["Normal"]);
             mockNasa.Setup(a => a.GetData(resultNormal, It.IsAny<int>())).Returns(responseNormal);
@@ -41,13 +53,73 @@ namespace Test
             //Assert
             Assert.IsNotNull(response);
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
-            Assert.AreEqual(((OkObjectResult) response).Value, ResponseJSONNormal());
+            Assert.AreEqual(((OkObjectResult)response).Value, ResponseJSONNormal());
             mockNasa.Verify(r => r.FetchData(It.IsAny<string>()));
             mockNasa.Verify(a => a.GetData(resultNormal, It.IsAny<int>()));
             mockJson.Verify(a => a.ConvertData<ResultApi>(It.IsAny<string>()));
             mockJson.Verify(a => a.GetUrl(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()));
             mockIDate.Verify(a => a.GetDate(It.IsAny<DateTime>(), It.IsAny<int>()));
 
+        }
+        [TestMethod]
+        public async Task TestResponseAPICorrecta()
+        {
+            //Arrange
+            Mock<INasaService> mockNasa = new();
+            var data = "";
+            using (StreamReader reader = new StreamReader("../../../FileResponse01.json"))
+            {
+                data = reader.ReadToEnd();
+            }
+            mockNasa.Setup(x => x.FetchData(It.IsAny<string>())).ReturnsAsync(data);
+            mockNasa.Setup(x => x.GetData(It.IsAny<ResultApi>(), It.IsAny<int>())).Returns(ResponseNormal());
+
+            //Act
+            NasaController nasaController = new(mockNasa.Object, new JSONService(), new DateService(), _configuration);
+            var response = await nasaController.GetInfo(3);
+
+            //Assert
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            Assert.AreEqual(((OkObjectResult)response).Value, ResponseJSONNormal());
+
+        }
+        [TestMethod]
+        public async Task TestResponseAPINull()
+        {
+            //Arrange
+            Mock<INasaService> mockNasa = new();
+
+            mockNasa.Setup(x => x.FetchData(It.IsAny<string>())).ReturnsAsync((string)null);
+
+            //Act
+            NasaController nasaController = new(mockNasa.Object, new JSONService(), new DateService(), _configuration);
+            var response = await nasaController.GetInfo(3);
+
+            //Assert
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(BadRequestObjectResult));
+            mockNasa.Verify(r => r.FetchData(It.IsAny<string>()));
+        }
+        [TestMethod]
+        public async Task TestResponseAPIStatusCodeBad()
+        {
+
+            //Arrange
+            Mock<INasaService> mockNasa = new();
+            mockNasa.Setup(x => x.FetchData(It.IsAny<string>())).Throws(new Exception("429__Todas las claves han sido consumidas"));
+
+            //Act
+            NasaController nasaController = new(mockNasa.Object, new JSONService(), new DateService(), _configuration);
+            var response = await nasaController.GetInfo(3);
+
+            //Arrange
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOfType(response, typeof(ObjectResult));
+            ObjectResult result = (ObjectResult)response;
+            Assert.IsTrue(result.StatusCode == 429);
+            mockNasa.Verify(x => x.FetchData(It.IsAny<string>()));
         }
         private ResultApi ResultNormal()
         {
