@@ -38,16 +38,16 @@ namespace Test
                 }
             };
         }
-        public static AsteroidDTO AsteroidDTOGenerator(string name, decimal diameter, decimal speed, string orbit)
+        public static AsteroidDTO AsteroidDTOGenerator(string name, decimal diameter, decimal speed, string orbit, DateOnly fecha)
         {
             return new AsteroidDTO()
             {
-                Nombre=name,
-                Diametro=diameter,
-                Velocidad=speed,
-                Planeta=orbit,
-
-            }
+                Nombre = name,
+                Diametro = diameter,
+                Velocidad = speed,
+                Planeta = orbit,
+                Fecha= fecha
+            };
         }
     }
 }

@@ -42,8 +42,9 @@ namespace PruebaDeNivelNasa.Services
         /// <param name="endDate">End Date</param>
         /// <param name="key">Key for the api, if is not a valid key the api will return 400</param>
         /// <returns>String with the full url with parameters to the API</returns>
-        public string GetUrl(string url, DateTime startDate, DateTime endDate, string key)
+        public string GetUrl(string url, DateTime startDate, DateTime endDate, string key = "DEMO_KEY")
         {
+
             string response = $"{url}?start_date={startDate:yyyy-MM-dd}&end_date={endDate:yyyy-MM-dd}&api_key={key}";
             return response;
         }
