@@ -56,12 +56,13 @@ namespace PruebaDeNivelNasa.Services
         /// Method to fetch the data from the url given
         /// </summary>
         /// <param name="url">Url where the data will be fetch</param>
-        /// <returns>String content of the url or null if the status code was not succes</returns>
+        /// <returns>String content of the url if the status code is success or null if the url was not valid</returns>
+        /// <exception cref="Exception">Throw if the api returns a non success status code</exception>
         public async Task<string> FetchData(string url)
         {
             if (url is null || url == string.Empty)
             {
-                return null;
+                throw new Exception("400__{error:'The URL could not be resolved'}");
             }
             HttpResponseMessage response;
             try { 
@@ -69,7 +70,7 @@ namespace PruebaDeNivelNasa.Services
             }
             catch
             {
-                return null;
+                throw new Exception("400__{error:'The URL could not be resolved'}");
             }
             if (response.IsSuccessStatusCode)
             {
@@ -77,7 +78,9 @@ namespace PruebaDeNivelNasa.Services
             }
             else
             {
-                return null;
+                int errorCode = (int)response.StatusCode;
+                string message=await response.Content.ReadAsStringAsync();
+                throw new Exception($"{errorCode}__{message}");
             }
         }
         /// <summary>
