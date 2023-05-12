@@ -370,3 +370,9 @@ FodyWeavers.xsd
 /Test/bin/Debug/net7.0/PruebaDeNivelNasa.dll
 /Test/obj/Debug/net7.0/Test.csproj.CoreCompileInputs.cache
 /Test/bin/Debug/net7.0/PruebaDeNivelNasa.pdb
+/Test/bin/Debug/net7.0/CoverletSourceRootsMapping
+/Test/obj/Debug/net7.0/Test.assets.cache
+/Test/obj/Debug/net7.0/Test.GeneratedMSBuildEditorConfig.editorconfig
+/Test/obj/project.assets.json
+/Test/obj/project.nuget.cache
+/Test/obj/Test.csproj.nuget.dgspec.json
