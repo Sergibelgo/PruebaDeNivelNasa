@@ -1,5 +1,3 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -67,7 +65,7 @@ namespace Test
             //Arrange
             Mock<INasaService> mockNasa = new();
             var data = "";
-            using (StreamReader reader = new StreamReader("../../../FileResponse01.json"))
+            using (StreamReader reader = new("../../../FileResponse01.json"))
             {
                 data = reader.ReadToEnd();
             }

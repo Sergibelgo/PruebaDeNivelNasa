@@ -6,12 +6,12 @@ namespace PruebaDeNivelNasa.Services
     /// <summary>
     /// Service for the procedures realated to the API Nasa buissness
     /// </summary>
-    public class NasaService:INasaService
+    public class NasaService : INasaService
     {
         private readonly HttpClient _httpClient;
         private readonly IMapper _mapper;
 
-        public NasaService(HttpClient httpClient,IMapper mapper)
+        public NasaService(HttpClient httpClient, IMapper mapper)
         {
             _httpClient = httpClient;
             _mapper = mapper;
@@ -23,7 +23,7 @@ namespace PruebaDeNivelNasa.Services
         /// <param name="limit">The limit of asteroids to take</param>
         /// <returns>An object of type ResponseDTO</returns>
 
-        public ResponseDTO GetData(ResultApi dataAPI,int limit=3)
+        public ResponseDTO GetData(ResultApi dataAPI, int limit = 3)
         {
             int validLimit = limit < 1 ? 3 : limit;
             limit = validLimit;
@@ -65,8 +65,9 @@ namespace PruebaDeNivelNasa.Services
                 throw new Exception("400__{error:'The URL could not be resolved'}");
             }
             HttpResponseMessage response;
-            try { 
-            response= await _httpClient.GetAsync(url);
+            try
+            {
+                response = await _httpClient.GetAsync(url);
             }
             catch
             {
@@ -79,7 +80,7 @@ namespace PruebaDeNivelNasa.Services
             else
             {
                 int errorCode = (int)response.StatusCode;
-                string message=await response.Content.ReadAsStringAsync();
+                string message = await response.Content.ReadAsStringAsync();
                 throw new Exception($"{errorCode}__{message}");
             }
         }
@@ -88,7 +89,7 @@ namespace PruebaDeNivelNasa.Services
         /// </summary>
         /// <param name="limit"></param>
         /// <param name="response">The object of type ResponseDTO to order and limit</param>
-        private void LimitList(int limit,ResponseDTO response)
+        private void LimitList(int limit, ResponseDTO response)
         {
             response.List = response.List.OrderByDescending(a => a.Diametro).Take(limit).ToList();
         }
