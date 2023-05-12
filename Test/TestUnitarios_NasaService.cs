@@ -1,13 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
-using Moq;
 using PruebaDeNivelNasa.Models;
 using PruebaDeNivelNasa.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test
 {
@@ -33,11 +26,11 @@ namespace Test
             _ = Assert.ThrowsExceptionAsync<Exception>(() => nasaService.FetchData(""));
             _ = Assert.ThrowsExceptionAsync<Exception>(() => nasaService.FetchData("   "));
             //The API may not have more free keys so either if an exception or string is return the code works fine, check console to see if the error is correct
-            Exception excTest=null;
-            string json=null;
+            Exception excTest = null;
+            string json = null;
             try
             {
-                 json = await nasaService.FetchData("https://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&api_key=DEMO_KEY");
+                json = await nasaService.FetchData("https://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&api_key=DEMO_KEY");
             }
             catch (Exception ex)
             {
