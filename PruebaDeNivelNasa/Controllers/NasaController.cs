@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PruebaDeNivelNasa.Models;
-using PruebaDeNivelNasa.Services;
+using PruebaDeNivelNasa.Models.DTOS;
+using PruebaDeNivelNasa.Models.ResultAPI;
+using PruebaDeNivelNasa.Services.Interfaces;
 
 namespace PruebaDeNivelNasa.Controllers
 {
@@ -35,19 +36,19 @@ namespace PruebaDeNivelNasa.Controllers
             if (days is null)
             {
                 var error = "The query parameter 'days' is necesary, please add it to use the API";
-                var responseError = _JSONService.GetResult(error);
+                var responseError = _JSONService.GetResult(new { error });
                 return BadRequest(responseError);
             }
             if (days < 1 || days > 7)
             {
                 var error = "Invalid number of days, it must be between 1 and 7";
-                var responseError = _JSONService.GetResult(error);
+                var responseError = _JSONService.GetResult(new { error });
                 return UnprocessableEntity(responseError);
             }
             if (limit < 1)
             {
                 var error = "The limit must be positive and bigger than 0";
-                var responseError = _JSONService.GetResult(error);
+                var responseError = _JSONService.GetResult( new { error });
                 return UnprocessableEntity(responseError);
             }
             DateTime startDate = DateTime.Now;
@@ -59,8 +60,8 @@ namespace PruebaDeNivelNasa.Controllers
             }
             catch (Exception ex)
             {
-                var messageError = $"Tried to generate a url with the given data but was not valid: {ex.Message}";
-                var responseError = _JSONService.GetResult(messageError);
+                var error = $"Tried to generate a url with the given data but was not valid: {ex.Message}";
+                var responseError = _JSONService.GetResult(new { error });
                 return StatusCode(500, responseError);
             }
 
@@ -79,7 +80,7 @@ namespace PruebaDeNivelNasa.Controllers
             if (String.IsNullOrEmpty(data))
             {
                 var error = "The URL to fetch was empty";
-                var responseError = _JSONService.GetResult(error);
+                var responseError = _JSONService.GetResult(new { error });
                 return BadRequest(responseError);
             }
             ResultApi dataAPI = _JSONService.ConvertData<ResultApi>(data);

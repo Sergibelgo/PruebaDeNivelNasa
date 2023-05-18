@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
-using PruebaDeNivelNasa.Models;
+using PruebaDeNivelNasa.Models.DTOS;
+using PruebaDeNivelNasa.Models.ResultAPI;
+using PruebaDeNivelNasa.Services.Interfaces;
 
-namespace PruebaDeNivelNasa.Services
+namespace PruebaDeNivelNasa.Services.Classes
 {
     /// <summary>
     /// Service for the procedures realated to the API Nasa buissness

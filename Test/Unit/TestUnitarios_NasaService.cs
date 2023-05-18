@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using PruebaDeNivelNasa.Models;
-using PruebaDeNivelNasa.Services;
-
-namespace Test
+using PruebaDeNivelNasa.Models.DTOS;
+using PruebaDeNivelNasa.Models.ResultAPI;
+using PruebaDeNivelNasa.Services.Classes;
+using static Test.Utils.Utils;
+namespace Test.Unit
 {
     [TestClass]
     public class TestUnitarios_NasaService
@@ -50,14 +51,15 @@ namespace Test
                     {
                         DateOnly.MaxValue,new List<Asteroid>
                         {
-                            Utils.AsteroidGenerator(true,"prueba1",DateOnly.MaxValue,"Earth",2000,10,10),
-                            Utils.AsteroidGenerator(true,"prueba2",DateOnly.MaxValue,"Earth",2000,20,20),
-                            Utils.AsteroidGenerator(false,"prueba3",DateOnly.MaxValue,"Earth",2000,10,10),
-                            Utils.AsteroidGenerator(false,"prueba4",DateOnly.MaxValue,"Earth",2000,10,10)
+                            AsteroidGenerator(true, "prueba1", DateOnly.MaxValue, "Earth", 2000, 10, 10),
+                            AsteroidGenerator(true,"prueba2",DateOnly.MaxValue,"Earth",2000,20,20),
+                            AsteroidGenerator(false,"prueba3",DateOnly.MaxValue,"Earth",2000,10,10),
+                            AsteroidGenerator(false,"prueba4",DateOnly.MaxValue,"Earth",2000,10,10)
                         }
                     }
                 }
             };
+
             ResultApi resultadoAPI02 = new ResultApi();
             var result01 = nasaService.GetData(resultadoAPI01, 3);
             var result02 = nasaService.GetData(resultadoAPI01, -1);
@@ -65,12 +67,12 @@ namespace Test
             var result04 = nasaService.GetData(resultadoAPI02, 3);
             var expectedlist01 = new List<AsteroidDTO>()
             {
-                Utils.AsteroidDTOGenerator("prueba2",20,2000,"Earth",DateOnly.MaxValue),
-                Utils.AsteroidDTOGenerator("prueba1",10,2000,"Earth",DateOnly.MaxValue)
+                Utils.Utils.AsteroidDTOGenerator("prueba2",20,2000,"Earth",DateOnly.MaxValue),
+                Utils.Utils.AsteroidDTOGenerator("prueba1",10,2000,"Earth",DateOnly.MaxValue)
             };
             var expectedlist03 = new List<AsteroidDTO>()
             {
-                Utils.AsteroidDTOGenerator("prueba2",20,2000,"Earth",DateOnly.MaxValue)
+                Utils.Utils.AsteroidDTOGenerator("prueba2",20,2000,"Earth",DateOnly.MaxValue)
             };
             var expectedlist04 = new ResponseDTO();
             Assert.IsNotNull(result01);

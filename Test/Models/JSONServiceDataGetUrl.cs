@@ -1,4 +1,4 @@
-﻿namespace Test
+﻿namespace Test.Models
 {
     internal class JSONServiceDataGetUrl
     {

@@ -3,12 +3,16 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Newtonsoft.Json;
 using PruebaDeNivelNasa.Controllers;
-using PruebaDeNivelNasa.Models;
-using PruebaDeNivelNasa.Services;
+using PruebaDeNivelNasa.Models.DTOS;
+using PruebaDeNivelNasa.Models.ResultAPI;
+using PruebaDeNivelNasa.Services.Classes;
+using PruebaDeNivelNasa.Services.Interfaces;
+using static Test.Utils.Utils;
 
 namespace Test
 {
     //TODO: separa por carpetas los test de mock de los unitarios
+    //Fixed
     [TestClass]
     public class TestMock_NasaController
     {
@@ -125,148 +129,7 @@ namespace Test
             mockNasa.Verify(x => x.FetchData(It.IsAny<string>()));
         }
         //TODO: en una case de tests, solo debe haber tests, extrae los métodos que no sean tests (a una clase de utils por ejemplo)
-        private ResultApi ResultNormal()
-        {
-            return new ResultApi()
-            {
-                element_count = 4,
-                near_earth_objects = new Dictionary<DateOnly, List<Asteroid>>
-                {
-                    {DateOnly.MaxValue, new List<Asteroid> {
-                        new Asteroid()
-                        {
-                            name="4341 Poseidon (1987 KF)",
-                            id=2004341,
-                            close_approach_data=new List<Close_approach_data>(){
-                                new Close_approach_data(){
-                                    close_approach_date=DateOnly.MaxValue,
-                                    relative_velocity=new Relative_velocity()
-                                    {
-                                        kilometers_per_hour=64181.5940497522M
-                                    },
-                                    orbiting_body="Earth"
-                                }
-                            },
-                            estimated_diameter= new Estimated_diameter()
-                            {
-                                kilometers=new Estimated()
-                                {
-                                    estimated_diameter_max=3.6144313359M,
-                                    estimated_diameter_min=1.6164228334M
-                                }
-                            },
-                            is_potentially_hazardous_asteroid=true,
-                            links=null
+        //Fixed
 
-                        },new Asteroid()
-                        {
-                            name="4341 Poseidon (1987 KF)",
-                            id=2004341,
-                            close_approach_data=new List<Close_approach_data>(){
-                                new Close_approach_data(){
-                                    close_approach_date=DateOnly.MaxValue,
-                                    relative_velocity=new Relative_velocity()
-                                    {
-                                        kilometers_per_hour=64181.5940497522M
-                                    }
-                                }
-                            },
-                            estimated_diameter= new Estimated_diameter()
-                            {
-                                kilometers=new Estimated()
-                                {
-                                    estimated_diameter_max=10,
-                                    estimated_diameter_min=10
-                                }
-                            },
-                            is_potentially_hazardous_asteroid=false,
-                            links=null
-                        },new Asteroid()
-                        {
-                            name="4341 Poseidon (1987 KF)",
-                            id=2004341,
-                            close_approach_data=new List<Close_approach_data>(){
-                                new Close_approach_data(){
-                                    close_approach_date=DateOnly.MaxValue,
-                                    relative_velocity=new Relative_velocity()
-                                    {
-                                        kilometers_per_hour=64181.5940497522M
-                                    }
-                                }
-                            },
-                            estimated_diameter= new Estimated_diameter()
-                            {
-                                kilometers=new Estimated()
-                                {
-                                    estimated_diameter_max=10,
-                                    estimated_diameter_min=10
-                                }
-                            },
-                            is_potentially_hazardous_asteroid=false,
-                            links=null
-                        },new Asteroid()
-                        {
-                            name="4341 Poseidon (1987 KF)",
-                            id=2004341,
-                            close_approach_data=new List<Close_approach_data>(){
-                                new Close_approach_data(){
-                                    close_approach_date=DateOnly.MaxValue,
-                                    relative_velocity=new Relative_velocity()
-                                    {
-                                        kilometers_per_hour=64181.5940497522M
-                                    }
-                                }
-                            },
-                            estimated_diameter= new Estimated_diameter()
-                            {
-                                kilometers=new Estimated()
-                                {
-                                    estimated_diameter_max=10,
-                                    estimated_diameter_min=10
-                                }
-                            },
-                            is_potentially_hazardous_asteroid=false,
-                            links=null
-                        }
-                    }}
-                }
-            };
-        }
-        private ResponseDTO ResponseNormal()
-        {
-            return new ResponseDTO()
-            {
-                List = new List<AsteroidDTO>()
-                {
-                    new AsteroidDTO()
-                    {
-                        Nombre="4341 Poseidon (1987 KF)",
-                        Fecha=DateOnly.MaxValue,
-                        Diametro=2.61542708465M,
-                        Planeta="Earth",
-                        Velocidad=64181.5940497522M
-                    }
-                }
-            };
-        }
-        private string ResponseJSONNormal()
-        {
-            var data = ResponseNormal();
-            return JsonConvert.SerializeObject(data);
-        }
-        private Dictionary<string, string> GetDataForResponseTest()
-        {
-            var dictionary = new Dictionary<string, string>();
-            string[] fileArray = { "../../../FileResponse01.json" };
-            foreach (string item in fileArray)
-            {
-                using (StreamReader reader = new StreamReader(item))
-                {
-                    dictionary["Normal"] = reader.ReadToEnd();
-                }
-            }
-            return dictionary;
-
-        }
     }
 }

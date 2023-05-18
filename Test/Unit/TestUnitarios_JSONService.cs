@@ -1,6 +1,7 @@
-﻿using PruebaDeNivelNasa.Services;
+﻿using PruebaDeNivelNasa.Services.Classes;
+using Test.Models;
 
-namespace Test
+namespace Test.Unit
 {
     [TestClass]
     public class TestUnitarios_JSONService
