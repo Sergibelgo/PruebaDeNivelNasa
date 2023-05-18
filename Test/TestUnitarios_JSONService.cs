@@ -14,6 +14,7 @@ namespace Test
         [TestMethod]
         public void JSONService_GetUrl()
         {
+            //TODO: evita el hardcode
             string urlBase = "https://api.nasa.gov/neo/rest/v1/feed";
             JSONServiceDataGetUrl data01 = new()
             {

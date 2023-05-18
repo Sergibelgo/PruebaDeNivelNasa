@@ -31,6 +31,7 @@ namespace PruebaDeNivelNasa.Controllers
         [HttpGet]
         public async Task<IActionResult> GetInfo(int? days, string key = "DEMO_KEY", int limit = 3)
         {
+            //TODO: los mensajes de error deben de tener formato json (message:, etc)
             if (days is null)
             {
                 var error = "The query parameter 'days' is necesary, please add it to use the API";

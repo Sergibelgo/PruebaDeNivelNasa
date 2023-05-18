@@ -8,12 +8,14 @@ using PruebaDeNivelNasa.Services;
 
 namespace Test
 {
+    //TODO: separa por carpetas los test de mock de los unitarios
     [TestClass]
     public class TestMock_NasaController
     {
         private readonly IConfiguration _configuration;
         public TestMock_NasaController()
         {
+            //TODO: hay que evitar el hardcodeo de urls
             var myConfiguration = new Dictionary<string, string>
             {
                 {"APIURL", "https://api.nasa.gov/neo/rest/v1/feed"},
@@ -23,6 +25,8 @@ namespace Test
                .AddInMemoryCollection(myConfiguration)
                .Build();
         }
+        //TODO: te falta mockear el httpclient que usa tu servicio para llamar a la api de la nasa y simular
+        //que ese httpclient te devuelve un json
         [TestMethod]
         public async Task TestResponseNormal()
         {
@@ -30,6 +34,7 @@ namespace Test
             Dictionary<string, string> DataForResponse = GetDataForResponseTest();
             var resultNormal = ResultNormal();
             var responseNormal = ResponseNormal();
+            //TODO: declaras el mismo objeto en varios métodos, se puede declarar como propiedad de la clase
             Mock<INasaService> mockNasa = new();
             Mock<IJSONService> mockJson = new();
             Mock<IDateService> mockIDate = new();
@@ -119,6 +124,7 @@ namespace Test
             Assert.IsTrue(result.StatusCode == 429);
             mockNasa.Verify(x => x.FetchData(It.IsAny<string>()));
         }
+        //TODO: en una case de tests, solo debe haber tests, extrae los métodos que no sean tests (a una clase de utils por ejemplo)
         private ResultApi ResultNormal()
         {
             return new ResultApi()

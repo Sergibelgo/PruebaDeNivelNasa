@@ -1,5 +1,7 @@
 ﻿namespace PruebaDeNivelNasa.Models
 {
+    //TODO: debe haber únicament euna clase por archivo
+    //TODO: deben estar separados los modelos de obtención/parseo de la API de los DTOS, por ejemplo con carpetas
     public class ResponseDTO
     {
         public List<AsteroidDTO> List { get; set; } = new List<AsteroidDTO>();

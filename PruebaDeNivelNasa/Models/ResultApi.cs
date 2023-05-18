@@ -1,5 +1,6 @@
 ﻿namespace PruebaDeNivelNasa.Models
 {
+    //TODO: 1 clase por 1 archivo
     public class ResultApi
     {
         public int element_count { get; set; }
