@@ -2,17 +2,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
-using Moq.Protected;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using PruebaDeNivelNasa.Controllers;
 using PruebaDeNivelNasa.Models.DTOS;
 using PruebaDeNivelNasa.Models.ResultAPI;
 using PruebaDeNivelNasa.Services.Classes;
 using PruebaDeNivelNasa.Services.Interfaces;
-using System.Net;
-using System.Net.Http.Json;
-using System.Text.Json.Nodes;
 using static Test.Utils.Utils;
 
 namespace Test.Mock
@@ -194,6 +188,6 @@ namespace Test.Mock
             Assert.IsInstanceOfType(result3, typeof(UnprocessableEntityObjectResult));
 
         }
-        
+
     }
 }

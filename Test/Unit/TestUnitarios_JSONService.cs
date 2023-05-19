@@ -7,7 +7,7 @@ namespace Test.Unit
     public class TestUnitarios_JSONService
     {
         private JSONService jsonService;
-        private readonly string urlBase= "https://api.nasa.gov/neo/rest/v1/feed";
+        private readonly string urlBase = "https://api.nasa.gov/neo/rest/v1/feed";
 
         public TestUnitarios_JSONService()
         {

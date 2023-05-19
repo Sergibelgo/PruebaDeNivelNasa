@@ -69,12 +69,12 @@ namespace Test.Unit
             var result04 = nasaService.GetData(resultadoAPI02, 3);
             var expectedlist01 = new List<AsteroidDTO>()
             {
-                Utils.Utils.AsteroidDTOGenerator("prueba2",20,2000,"Earth",DateOnly.MaxValue),
-                Utils.Utils.AsteroidDTOGenerator("prueba1",10,2000,"Earth",DateOnly.MaxValue)
+                AsteroidDTOGenerator("prueba2",20,2000,"Earth",DateOnly.MaxValue),
+                AsteroidDTOGenerator("prueba1",10,2000,"Earth",DateOnly.MaxValue)
             };
             var expectedlist03 = new List<AsteroidDTO>()
             {
-                Utils.Utils.AsteroidDTOGenerator("prueba2",20,2000,"Earth",DateOnly.MaxValue)
+                AsteroidDTOGenerator("prueba2",20,2000,"Earth",DateOnly.MaxValue)
             };
             var expectedlist04 = new ResponseDTO();
             Assert.IsNotNull(result01);
