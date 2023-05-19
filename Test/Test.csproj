@@ -21,8 +21,4 @@
     <ProjectReference Include="..\PruebaDeNivelNasa\PruebaDeNivelNasa.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mock\" />
-  </ItemGroup>
-
 </Project>

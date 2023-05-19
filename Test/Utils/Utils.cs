@@ -1,6 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Moq.Protected;
+using Moq;
+using Newtonsoft.Json;
 using PruebaDeNivelNasa.Models.DTOS;
 using PruebaDeNivelNasa.Models.ResultAPI;
+using System.Net;
 
 namespace Test.Utils
 {
@@ -189,5 +192,37 @@ namespace Test.Utils
             return dictionary;
 
         }
+        public static Mock<HttpMessageHandler> ConfigureMoqHTTP(string urlJson)
+        {
+            Mock<HttpMessageHandler> mockHttpClientHandler = new();
+            //Arrange
+            string data = "";
+
+            try
+            {
+                using StreamReader reader = new(urlJson);
+                data = reader.ReadToEnd().Replace("\\n", "").Replace("\\t", "");
+            }
+            catch
+            {
+                data = "";
+            }
+
+            HttpResponseMessage response = new()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(data)
+            };
+            mockHttpClientHandler = new();
+            mockHttpClientHandler
+              .Protected()
+              .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+              .ReturnsAsync(response);
+            return mockHttpClientHandler;
+        }
+
     }
 }

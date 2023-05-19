@@ -27,6 +27,10 @@ namespace PruebaDeNivelNasa.Services.Classes
 
         public ResponseDTO GetData(ResultApi dataAPI, int limit = 3)
         {
+            if (dataAPI is null)
+            {
+                return null;
+            }
             int validLimit = limit < 1 ? 3 : limit;
             limit = validLimit;
             ResponseDTO responseDTO = new()

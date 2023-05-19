@@ -7,6 +7,7 @@ namespace Test.Unit
     public class TestUnitarios_JSONService
     {
         private JSONService jsonService;
+        private readonly string urlBase= "https://api.nasa.gov/neo/rest/v1/feed";
 
         public TestUnitarios_JSONService()
         {
@@ -16,7 +17,7 @@ namespace Test.Unit
         public void JSONService_GetUrl()
         {
             //TODO: evita el hardcode
-            string urlBase = "https://api.nasa.gov/neo/rest/v1/feed";
+            //Fixed
             JSONServiceDataGetUrl data01 = new()
             {
                 StartDate = DateTime.Now,

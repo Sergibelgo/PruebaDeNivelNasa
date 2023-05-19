@@ -1,15 +1,21 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PruebaDeNivelNasa.Controllers;
 using PruebaDeNivelNasa.Models.DTOS;
 using PruebaDeNivelNasa.Models.ResultAPI;
 using PruebaDeNivelNasa.Services.Classes;
 using PruebaDeNivelNasa.Services.Interfaces;
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json.Nodes;
 using static Test.Utils.Utils;
 
-namespace Test
+namespace Test.Mock
 {
     //TODO: separa por carpetas los test de mock de los unitarios
     //Fixed
@@ -17,9 +23,22 @@ namespace Test
     public class TestMock_NasaController
     {
         private readonly IConfiguration _configuration;
+        public Mock<INasaService> mockNasa;
+        public Mock<IJSONService> mockJson;
+        public Mock<IDateService> mockIDate;
+        public MapperConfiguration config = new(cfg =>
+        {
+            cfg.CreateMap<Asteroid, AsteroidDTO>()
+            .ForMember(dto => dto.Nombre, ent => ent.MapFrom(x => x.name))
+            .ForMember(dto => dto.Fecha, ent => ent.MapFrom(x => x.close_approach_data[0].close_approach_date))
+            .ForMember(dto => dto.Planeta, ent => ent.MapFrom(x => x.close_approach_data[0].orbiting_body))
+            .ForMember(dto => dto.Velocidad, ent => ent.MapFrom(x => x.close_approach_data[0].relative_velocity.kilometers_per_hour))
+            .ForMember(dto => dto.Diametro, ent => ent.MapFrom(x => (x.estimated_diameter.kilometers.estimated_diameter_max + x.estimated_diameter.kilometers.estimated_diameter_min) / 2));
+        });
         public TestMock_NasaController()
         {
             //TODO: hay que evitar el hardcodeo de urls
+            //Este es necesario por que estoy creando el configuration que simulara el controlador
             var myConfiguration = new Dictionary<string, string>
             {
                 {"APIURL", "https://api.nasa.gov/neo/rest/v1/feed"},
@@ -31,6 +50,7 @@ namespace Test
         }
         //TODO: te falta mockear el httpclient que usa tu servicio para llamar a la api de la nasa y simular
         //que ese httpclient te devuelve un json
+        //Fixed
         [TestMethod]
         public async Task TestResponseNormal()
         {
@@ -39,9 +59,9 @@ namespace Test
             var resultNormal = ResultNormal();
             var responseNormal = ResponseNormal();
             //TODO: declaras el mismo objeto en varios métodos, se puede declarar como propiedad de la clase
-            Mock<INasaService> mockNasa = new();
-            Mock<IJSONService> mockJson = new();
-            Mock<IDateService> mockIDate = new();
+            mockNasa = new();
+            mockJson = new();
+            mockIDate = new();
 
             mockNasa.Setup(a => a.FetchData(It.IsAny<string>())).ReturnsAsync(DataForResponse["Normal"]);
             mockNasa.Setup(a => a.GetData(resultNormal, It.IsAny<int>())).Returns(responseNormal);
@@ -72,7 +92,7 @@ namespace Test
         public async Task TestResponseAPICorrecta()
         {
             //Arrange
-            Mock<INasaService> mockNasa = new();
+            mockNasa = new();
             var data = "";
             using (StreamReader reader = new("../../../FileResponse01.json"))
             {
@@ -96,7 +116,7 @@ namespace Test
         public async Task TestResponseAPINull()
         {
             //Arrange
-            Mock<INasaService> mockNasa = new();
+            mockNasa = new();
 
             mockNasa.Setup(x => x.FetchData(It.IsAny<string>())).ReturnsAsync((string)null);
 
@@ -114,7 +134,7 @@ namespace Test
         {
 
             //Arrange
-            Mock<INasaService> mockNasa = new();
+            mockNasa = new();
             mockNasa.Setup(x => x.FetchData(It.IsAny<string>())).Throws(new Exception("429__Todas las claves han sido consumidas"));
 
             //Act
@@ -130,6 +150,50 @@ namespace Test
         }
         //TODO: en una case de tests, solo debe haber tests, extrae los métodos que no sean tests (a una clase de utils por ejemplo)
         //Fixed
+        [TestMethod]
+        public async Task TestHttpClient_Normal()
+        {
+            //Arrange
+            var mockHttpClientHandler = ConfigureMoqHTTP("../../../FileResponse01.json");
+            var nasaService = new NasaService(new HttpClient(mockHttpClientHandler.Object), new Mapper(config));
 
+            //Act
+            NasaController nasaController = new(nasaService, new JSONService(), new DateService(), _configuration);
+            var result1 = await nasaController.GetInfo(3);
+            //Assert
+            Assert.IsNotNull(result1);
+            Assert.IsInstanceOfType(result1, typeof(OkObjectResult));
+
+        }
+        [TestMethod]
+        public async Task TestHttpClient_Null()
+        {
+            //Arrange
+            var mockHttpClientHandler = ConfigureMoqHTTP(null);
+            var nasaService = new NasaService(new HttpClient(mockHttpClientHandler.Object), new Mapper(config));
+            //Act
+            NasaController nasaController = new(nasaService, new JSONService(), new DateService(), _configuration);
+            var result2 = await nasaController.GetInfo(3);
+            //Assert
+            Assert.IsNotNull(result2);
+            Assert.IsInstanceOfType(result2, typeof(BadRequestObjectResult));
+
+        }
+        [TestMethod]
+        public async Task TestHttpClient_InvalidJSON()
+        {
+            //Arrange
+            var mockHttpClientHandler = ConfigureMoqHTTP("../../../FileResponse02.json");
+            var nasaService = new NasaService(new HttpClient(mockHttpClientHandler.Object), new Mapper(config));
+
+            //Act
+            NasaController nasaController = new(nasaService, new JSONService(), new DateService(), _configuration);
+            var result3 = await nasaController.GetInfo(3);
+            //Assert
+            Assert.IsNotNull(result3);
+            Assert.IsInstanceOfType(result3, typeof(UnprocessableEntityObjectResult));
+
+        }
+        
     }
 }

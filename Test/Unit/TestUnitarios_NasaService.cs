@@ -9,6 +9,8 @@ namespace Test.Unit
     public class TestUnitarios_NasaService
     {
         private NasaService nasaService;
+        private readonly string urlCorrecta = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&api_key=DEMO_KEY";
+        private readonly string urlFalsa = "http://urltotalmentefalsaysinsentido.com/";
 
         public TestUnitarios_NasaService()
         {
@@ -23,7 +25,7 @@ namespace Test.Unit
         public async Task NasaSerice_FetchData()
         {
 
-            _ = Assert.ThrowsExceptionAsync<Exception>(() => nasaService.FetchData("http://urltotalmentefalsaysinsentido.com/"));
+            _ = Assert.ThrowsExceptionAsync<Exception>(() => nasaService.FetchData(urlFalsa));
             _ = Assert.ThrowsExceptionAsync<Exception>(() => nasaService.FetchData(""));
             _ = Assert.ThrowsExceptionAsync<Exception>(() => nasaService.FetchData("   "));
             //The API may not have more free keys so either if an exception or string is return the code works fine, check console to see if the error is correct
@@ -31,7 +33,7 @@ namespace Test.Unit
             string json = null;
             try
             {
-                json = await nasaService.FetchData("https://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&api_key=DEMO_KEY");
+                json = await nasaService.FetchData(urlCorrecta);
             }
             catch (Exception ex)
             {
