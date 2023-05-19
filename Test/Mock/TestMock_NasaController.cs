@@ -29,6 +29,8 @@ namespace Test.Mock
             .ForMember(dto => dto.Velocidad, ent => ent.MapFrom(x => x.close_approach_data[0].relative_velocity.kilometers_per_hour))
             .ForMember(dto => dto.Diametro, ent => ent.MapFrom(x => (x.estimated_diameter.kilometers.estimated_diameter_max + x.estimated_diameter.kilometers.estimated_diameter_min) / 2));
         });
+        private readonly string jsonValido = "../../../FileResponse01.json";
+        private readonly string jsonNoValido = "../../../FileResponse02.json";
         public TestMock_NasaController()
         {
             //TODO: hay que evitar el hardcodeo de urls
@@ -42,7 +44,7 @@ namespace Test.Mock
                .AddInMemoryCollection(myConfiguration)
                .Build();
         }
-        
+
         [TestMethod]
         public async Task TestResponseNormal()
         {
@@ -147,7 +149,7 @@ namespace Test.Mock
         public async Task TestHttpClient_Normal()
         {
             //Arrange
-            var mockHttpClientHandler = ConfigureMoqHTTP("../../../FileResponse01.json");
+            var mockHttpClientHandler = ConfigureMoqHTTP(jsonValido);
             var nasaService = new NasaService(new HttpClient(mockHttpClientHandler.Object), new Mapper(config));
 
             //Act
@@ -176,7 +178,7 @@ namespace Test.Mock
         public async Task TestHttpClient_InvalidJSON()
         {
             //Arrange
-            var mockHttpClientHandler = ConfigureMoqHTTP("../../../FileResponse02.json");
+            var mockHttpClientHandler = ConfigureMoqHTTP(jsonNoValido);
             var nasaService = new NasaService(new HttpClient(mockHttpClientHandler.Object), new Mapper(config));
 
             //Act
