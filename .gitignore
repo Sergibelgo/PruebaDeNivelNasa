@@ -376,3 +376,4 @@ FodyWeavers.xsd
 /Test/obj/project.assets.json
 /Test/obj/project.nuget.cache
 /Test/obj/Test.csproj.nuget.dgspec.json
+/Test/obj/Test.csproj.nuget.g.props

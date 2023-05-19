@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
-using PruebaDeNivelNasa.Models;
+using PruebaDeNivelNasa.Models.DTOS;
+using PruebaDeNivelNasa.Models.ResultAPI;
+using PruebaDeNivelNasa.Services.Interfaces;
 
-namespace PruebaDeNivelNasa.Services
+namespace PruebaDeNivelNasa.Services.Classes
 {
     /// <summary>
     /// Service for the procedures realated to the API Nasa buissness
@@ -25,6 +27,10 @@ namespace PruebaDeNivelNasa.Services
 
         public ResponseDTO GetData(ResultApi dataAPI, int limit = 3)
         {
+            if (dataAPI is null)
+            {
+                return null;
+            }
             int validLimit = limit < 1 ? 3 : limit;
             limit = validLimit;
             ResponseDTO responseDTO = new()

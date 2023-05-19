@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using PruebaDeNivelNasa.Models;
+using PruebaDeNivelNasa.Models.DTOS;
+using PruebaDeNivelNasa.Models.ResultAPI;
 
-namespace PruebaDeNivelNasa.Services
+namespace PruebaDeNivelNasa.Services.Classes
 {
     public class AutoMapperProfiles : Profile
     {

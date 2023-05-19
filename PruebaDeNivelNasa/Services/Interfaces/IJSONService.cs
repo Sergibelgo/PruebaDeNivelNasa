@@ -1,4 +1,4 @@
-﻿namespace PruebaDeNivelNasa.Services
+﻿namespace PruebaDeNivelNasa.Services.Interfaces
 {
     public interface IJSONService
     {

@@ -1,125 +1,55 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Moq;
+﻿using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
-using PruebaDeNivelNasa.Controllers;
-using PruebaDeNivelNasa.Models;
-using PruebaDeNivelNasa.Services;
+using PruebaDeNivelNasa.Models.DTOS;
+using PruebaDeNivelNasa.Models.ResultAPI;
+using System.Net;
 
-namespace Test
+namespace Test.Utils
 {
-    [TestClass]
-    public class TestMock_NasaController
+    public static class Utils
     {
-        private readonly IConfiguration _configuration;
-        public TestMock_NasaController()
+        public static Asteroid AsteroidGenerator(bool hazard, string name, DateOnly date, string orbiting, decimal velocity, decimal diameter_max, decimal diameter_min)
         {
-            var myConfiguration = new Dictionary<string, string>
+            var random = Random.Shared;
+            return new Asteroid()
             {
-                {"APIURL", "https://api.nasa.gov/neo/rest/v1/feed"},
+                id = random.Next(),
+                name = name,
+                links = null,
+                is_potentially_hazardous_asteroid = hazard,
+                close_approach_data = new List<Close_approach_data> {
+                    new Close_approach_data() {
+                        close_approach_date = date,
+                        orbiting_body=orbiting,
+                        relative_velocity=new Relative_velocity()
+                        {
+                            kilometers_per_hour=velocity
+                        }
+                    }
+                },
+                estimated_diameter = new Estimated_diameter()
+                {
+                    kilometers = new Estimated()
+                    {
+                        estimated_diameter_max = diameter_max,
+                        estimated_diameter_min = diameter_min
+                    }
+                }
             };
-
-            _configuration = new ConfigurationBuilder()
-               .AddInMemoryCollection(myConfiguration)
-               .Build();
         }
-        [TestMethod]
-        public async Task TestResponseNormal()
+        public static AsteroidDTO AsteroidDTOGenerator(string name, decimal diameter, decimal speed, string orbit, DateOnly fecha)
         {
-            //Arrange
-            Dictionary<string, string> DataForResponse = GetDataForResponseTest();
-            var resultNormal = ResultNormal();
-            var responseNormal = ResponseNormal();
-            Mock<INasaService> mockNasa = new();
-            Mock<IJSONService> mockJson = new();
-            Mock<IDateService> mockIDate = new();
-
-            mockNasa.Setup(a => a.FetchData(It.IsAny<string>())).ReturnsAsync(DataForResponse["Normal"]);
-            mockNasa.Setup(a => a.GetData(resultNormal, It.IsAny<int>())).Returns(responseNormal);
-
-            mockJson.Setup(a => a.ConvertData<ResultApi>(It.IsAny<string>())).Returns(resultNormal);
-            mockJson.Setup(a => a.GetUrl(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>())).Returns("https://api.nasa.gov/neo/rest/v1/feed?start_date=2021-12-09&end_date=2021-12-12&api_key=DEMO_KEY");
-            mockJson.Setup(a => a.GetResult(It.IsAny<ResponseDTO>())).Returns(ResponseJSONNormal());
-
-            mockIDate.Setup(a => a.GetDate(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(DateTime.Now);
-
-            //Act
-            NasaController nasaController = new(mockNasa.Object, mockJson.Object, mockIDate.Object, new ConfigurationBuilder()
-    .Build());
-            var response = await nasaController.GetInfo(3);
-
-            //Assert
-            Assert.IsNotNull(response);
-            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
-            Assert.AreEqual(((OkObjectResult)response).Value, ResponseJSONNormal());
-            mockNasa.Verify(r => r.FetchData(It.IsAny<string>()));
-            mockNasa.Verify(a => a.GetData(resultNormal, It.IsAny<int>()));
-            mockJson.Verify(a => a.ConvertData<ResultApi>(It.IsAny<string>()));
-            mockJson.Verify(a => a.GetUrl(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()));
-            mockIDate.Verify(a => a.GetDate(It.IsAny<DateTime>(), It.IsAny<int>()));
-
-        }
-        [TestMethod]
-        public async Task TestResponseAPICorrecta()
-        {
-            //Arrange
-            Mock<INasaService> mockNasa = new();
-            var data = "";
-            using (StreamReader reader = new("../../../FileResponse01.json"))
+            return new()
             {
-                data = reader.ReadToEnd();
-            }
-            mockNasa.Setup(x => x.FetchData(It.IsAny<string>())).ReturnsAsync(data);
-            mockNasa.Setup(x => x.GetData(It.IsAny<ResultApi>(), It.IsAny<int>())).Returns(ResponseNormal());
-
-            //Act
-            NasaController nasaController = new(mockNasa.Object, new JSONService(), new DateService(), _configuration);
-            var response = await nasaController.GetInfo(3);
-
-            //Assert
-
-            Assert.IsNotNull(response);
-            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
-            Assert.AreEqual(((OkObjectResult)response).Value, ResponseJSONNormal());
-
+                Nombre = name,
+                Diametro = diameter,
+                Velocidad = speed,
+                Planeta = orbit,
+                Fecha = fecha
+            };
         }
-        [TestMethod]
-        public async Task TestResponseAPINull()
-        {
-            //Arrange
-            Mock<INasaService> mockNasa = new();
-
-            mockNasa.Setup(x => x.FetchData(It.IsAny<string>())).ReturnsAsync((string)null);
-
-            //Act
-            NasaController nasaController = new(mockNasa.Object, new JSONService(), new DateService(), _configuration);
-            var response = await nasaController.GetInfo(3);
-
-            //Assert
-            Assert.IsNotNull(response);
-            Assert.IsInstanceOfType(response, typeof(BadRequestObjectResult));
-            mockNasa.Verify(r => r.FetchData(It.IsAny<string>()));
-        }
-        [TestMethod]
-        public async Task TestResponseAPIStatusCodeBad()
-        {
-
-            //Arrange
-            Mock<INasaService> mockNasa = new();
-            mockNasa.Setup(x => x.FetchData(It.IsAny<string>())).Throws(new Exception("429__Todas las claves han sido consumidas"));
-
-            //Act
-            NasaController nasaController = new(mockNasa.Object, new JSONService(), new DateService(), _configuration);
-            var response = await nasaController.GetInfo(3);
-
-            //Arrange
-            Assert.IsNotNull(response);
-            Assert.IsInstanceOfType(response, typeof(ObjectResult));
-            ObjectResult result = (ObjectResult)response;
-            Assert.IsTrue(result.StatusCode == 429);
-            mockNasa.Verify(x => x.FetchData(It.IsAny<string>()));
-        }
-        private ResultApi ResultNormal()
+        public static ResultApi ResultNormal()
         {
             return new ResultApi()
             {
@@ -226,7 +156,7 @@ namespace Test
                 }
             };
         }
-        private ResponseDTO ResponseNormal()
+        public static ResponseDTO ResponseNormal()
         {
             return new ResponseDTO()
             {
@@ -243,12 +173,12 @@ namespace Test
                 }
             };
         }
-        private string ResponseJSONNormal()
+        public static string ResponseJSONNormal()
         {
             var data = ResponseNormal();
             return JsonConvert.SerializeObject(data);
         }
-        private Dictionary<string, string> GetDataForResponseTest()
+        public static Dictionary<string, string> GetDataForResponseTest()
         {
             var dictionary = new Dictionary<string, string>();
             string[] fileArray = { "../../../FileResponse01.json" };
@@ -262,5 +192,37 @@ namespace Test
             return dictionary;
 
         }
+        public static Mock<HttpMessageHandler> ConfigureMoqHTTP(string urlJson)
+        {
+            Mock<HttpMessageHandler> mockHttpClientHandler = new();
+            //Arrange
+            string data = "";
+
+            try
+            {
+                using StreamReader reader = new(urlJson);
+                data = reader.ReadToEnd().Replace("\\n", "").Replace("\\t", "");
+            }
+            catch
+            {
+                data = "";
+            }
+
+            HttpResponseMessage response = new()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(data)
+            };
+            mockHttpClientHandler = new();
+            mockHttpClientHandler
+              .Protected()
+              .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+              .ReturnsAsync(response);
+            return mockHttpClientHandler;
+        }
+
     }
 }

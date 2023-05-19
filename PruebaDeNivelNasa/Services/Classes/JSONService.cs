@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using PruebaDeNivelNasa.Services.Interfaces;
 
-namespace PruebaDeNivelNasa.Services
+namespace PruebaDeNivelNasa.Services.Classes
 {
     /// <summary>
     /// Service for all text related procedures
