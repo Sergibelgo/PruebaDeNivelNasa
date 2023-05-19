@@ -32,7 +32,7 @@ namespace Test.Mock
         public TestMock_NasaController()
         {
             //TODO: hay que evitar el hardcodeo de urls
-            //Este es necesario por que estoy creando el configuration que simulara el controlador
+            //Este es necesario por que estoy creando el configuration que simulara el configuration, dado que el mock no puede cojer el test no puede obtener el configuration real
             var myConfiguration = new Dictionary<string, string>
             {
                 {"APIURL", "https://api.nasa.gov/neo/rest/v1/feed"},
@@ -42,9 +42,7 @@ namespace Test.Mock
                .AddInMemoryCollection(myConfiguration)
                .Build();
         }
-        //TODO: te falta mockear el httpclient que usa tu servicio para llamar a la api de la nasa y simular
-        //que ese httpclient te devuelve un json
-        //Fixed
+        
         [TestMethod]
         public async Task TestResponseNormal()
         {
@@ -142,7 +140,8 @@ namespace Test.Mock
             Assert.IsTrue(result.StatusCode == 429);
             mockNasa.Verify(x => x.FetchData(It.IsAny<string>()));
         }
-        //TODO: en una case de tests, solo debe haber tests, extrae los métodos que no sean tests (a una clase de utils por ejemplo)
+        //TODO: te falta mockear el httpclient que usa tu servicio para llamar a la api de la nasa y simular
+        //que ese httpclient te devuelve un json
         //Fixed
         [TestMethod]
         public async Task TestHttpClient_Normal()
@@ -188,6 +187,8 @@ namespace Test.Mock
             Assert.IsInstanceOfType(result3, typeof(UnprocessableEntityObjectResult));
 
         }
+        //TODO: en una case de tests, solo debe haber tests, extrae los métodos que no sean tests (a una clase de utils por ejemplo)
+        //Fixed
 
     }
 }
